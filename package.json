@@ -21,6 +21,7 @@
     "eslint-config-airbnb-base": "^11.2.0",
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-react": "^7.1.0",
+    "lab": "^14.1.0",
     "nodemon": "^1.11.0",
     "sinon": "^2.3.4"
   },
