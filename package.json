@@ -5,7 +5,9 @@
   "main": "server.js",
   "license": "MIT",
   "scripts": {
-    "eslint": "eslint ./app/ --ext .js",
+    "eslint": "eslint ./app/ --ext .js", 
+    "build": "babel server.js  test/*.spec.js -d dist",
+    "test": "npm run build && npm run eslint && lab -T node_modules/lab-babel -t 100 -v -l --coverage-exclude node_modules --coverage-exclude dist",
     "dev": "babel-node server.js --presets es2015,stage-2",
     "start": "nodemon --exec \"npm run dev\" --ignore dist/"
   },
@@ -22,6 +24,7 @@
     "eslint-plugin-import": "^2.6.0",
     "eslint-plugin-react": "^7.1.0",
     "lab": "^14.1.0",
+    "lab-babel": "^1.1.1",
     "nodemon": "^1.11.0",
     "sinon": "^2.3.4"
   },

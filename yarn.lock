@@ -2237,6 +2237,10 @@ klaw@^1.0.0:
   optionalDependencies:
     graceful-fs "^4.1.9"
 
+lab-babel@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/lab-babel/-/lab-babel-1.1.1.tgz#6814b2722d941f00d0194290efbe56c1315e179d"
+
 lab@^14.1.0:
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/lab/-/lab-14.1.0.tgz#2632b9a416d5f391d9a6f1d98d607b0d69f75629"
