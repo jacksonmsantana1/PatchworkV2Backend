@@ -131,7 +131,7 @@ const routeStart = () => server.route([{
           name: Joi.string().required(),
           author: Joi.string().required(),
           layout: Joi.string().required(),
-          svg: Joi.string().required(),
+          svg: Joi.object(),
           image: Joi.string().required(),
           description: Joi.string().required(),
         },
