@@ -215,6 +215,30 @@ const routeStart = () => server.route([{
   handler: require('./app/POST/project/save'),
 },
 {
+  method: 'POST',
+  path: '/fabric/save',
+  config: {
+    auth: 'admin',
+    description: 'Save a new fabric',
+    tags: ['fabric', 'save', 'admin'],
+    notes: 'Only admin users can save a fabric',
+    validate: {
+      payload: {
+        name: Joi.string().required(),
+        company: Joi.string().required(),
+        image: Joi.string().required(),
+        description: Joi.string().required(),
+        colors: Joi.array().items(Joi.string()),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/POST/fabric/save'),
+},
+{
   method: 'PUT',
   path: '/isLogged',
   config: {
