@@ -13,7 +13,7 @@ const getFabric = request => Either.fromNullable(request).chain(H.props('payload
 const sendRequest = R.curry((request, reply, fabric) => {
   const credential = HS.getCredential(request).getOrElse('No credentials');
 
-  request.log('/fabric/update',
+  request.log('PUT /fabric/update',
     logMessage(request.id, true, credential, request.path, 'OK 200'));
 
   reply(fabric);
@@ -35,7 +35,7 @@ module.exports = (request, reply) => {
   const db = HS.getDB(request);
   const collection = HS.getCollection('fabrics', db.get());
 
-  request.log('/fabric/update',
+  request.log('PUT /fabric/update',
     logMessage(request.id, true, credential, request.path, 'Endpoint reached'));
 
   if (!HS.isAuthenticated(request).getOrElse(false)) {

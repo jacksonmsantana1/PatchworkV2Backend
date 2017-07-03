@@ -8,7 +8,7 @@ const Mongo = require('../../plugins/mongodb/mongo').fabric;
 const sendRequest = R.curry((request, reply, projects) => {
   const credential = HS.getCredential(request).getOrElse('No credentials');
 
-  request.log('/fabrics',
+  request.log('GET /fabrics',
     logMessage(request.id, true, credential, request.path, 'OK 200'));
 
   reply(projects);
@@ -29,7 +29,7 @@ module.exports = (request, reply) => {
   const db = HS.getDB(request);
   const collection = HS.getCollection('fabrics', db.get());
 
-  request.log('/fabrics',
+  request.log('GET /fabrics',
     logMessage(request.id, true, credential, request.path, 'Endpoint reached'));
 
   if (!HS.isAuthenticated(request).getOrElse(false)) {

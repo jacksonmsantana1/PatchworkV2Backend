@@ -37,7 +37,7 @@ const validateToken = token => new Task((reject, resolve) => {
 
 // sendRequest :: Request -> Response -> String
 const sendRequest = R.curry((request, reply, res) => {
-  request.log('/isLogged',
+  request.log('PUT /isLogged',
     logMessage(request.id, true, 'no-credentials', request.path, 'OK 200'));
 
   reply(res);
@@ -52,7 +52,7 @@ const sendError = R.curry((request, reply, err) => {
 });
 
 module.exports = (request, reply) => {
-  request.log('/isLogged',
+  request.log('PUT /isLogged',
     logMessage(request.id, true, 'no-credential', request.path, 'Endpoint reached'));
 
   getParams(request)

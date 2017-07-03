@@ -53,6 +53,31 @@ const options = {
       module: 'good-file',
       args: ['./error.log'],
     }],
+    myDebugReporter: [{
+      module: 'good-squeeze',
+      name: 'Squeeze',
+      args: [{
+        request: [
+          'DELETE /project/id',
+          'DELETE /fabric/id',
+          'GET /fabrics',
+          'GET /projects',
+          'GET /projects/id',
+          'POST /fabric/save',
+          'POST /project/save',
+          'PUT /project/update',
+          'PUT /fabric/update',
+          'PUT /isLogged',
+          'PUT /login',
+        ],
+      }],
+    }, {
+      module: 'good-squeeze',
+      name: 'SafeJson',
+    }, {
+      module: 'good-file',
+      args: ['./debug.log'],
+    }],
   },
 };
 

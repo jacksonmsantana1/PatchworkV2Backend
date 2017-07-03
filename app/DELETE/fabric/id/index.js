@@ -13,7 +13,7 @@ const getFabricId = request => Either.fromNullable(request).chain(H.props('param
 const sendRequest = R.curry((request, reply, project) => {
   const credential = HS.getCredential(request).getOrElse('No credentials');
 
-  request.log('/fabric/id',
+  request.log('DELETE /fabric/id',
     logMessage(request.id, true, credential, request.path, 'OK 200'));
 
   reply(project);
@@ -35,7 +35,7 @@ module.exports = (request, reply) => {
   const db = HS.getDB(request);
   const collection = HS.getCollection('projects', db.get());
 
-  request.log('/project/id',
+  request.log('DELETE /fabric/id',
     logMessage(request.id, true, credential, request.path, 'Endpoint reached'));
 
   if (!HS.isAuthenticated(request).getOrElse(false)) {

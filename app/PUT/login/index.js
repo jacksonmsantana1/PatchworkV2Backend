@@ -39,7 +39,7 @@ const createToken = (user) => {
 
 // sendRequest :: Request -> Response -> String
 const sendRequest = R.curry((request, reply, token) => {
-  request.log('/login',
+  request.log('PUT /login',
     logMessage(request.id, true, 'no-credential', request.path, 'OK 200'));
 
   reply(token);
