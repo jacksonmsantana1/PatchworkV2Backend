@@ -131,7 +131,7 @@ const routeStart = () => server.route([{
           name: Joi.string().required(),
           author: Joi.string().required(),
           layout: Joi.string().required(),
-          svg: Joi.object(),  // FIXME - Improve Svg scheme
+          svg: Joi.object(), // FIXME - Improve Svg scheme
           image: Joi.string().required(),
           description: Joi.string().required(),
         },
@@ -143,6 +143,32 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/PUT/project/update/'),
+},
+{
+  method: 'PUT',
+  path: '/fabric/update',
+  config: {
+    auth: 'admin',
+    description: 'Updates the given fabric',
+    tags: ['update', 'fabric'],
+    notes: 'Updates the fabric',
+    validate: {
+      payload: {
+        fabric: {
+          name: Joi.string().required(),
+          company: Joi.string().required(),
+          image: Joi.string().required(),
+          description: Joi.string().required(),
+          colors: Joi.array().items(Joi.string()),
+        },
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/PUT/fabric/update/'),
 },
 {
   method: 'GET',

@@ -88,6 +88,37 @@ const saveFabric = R.curry((collection, fabric) => validateFabric(FabricSchema, 
   .chain(fabricExist(collection))
   .chain(insertFabric(collection)));
 
+// replaceFabric :: Collection -> Fabric -> Fabric
+const replaceFabric = R.curry((collection, newFabric, oldFabric) =>
+  new Task((reject, resolve) => {
+    if (collection.collectionName !== 'fabrics') {
+      return reject(Boom.badImplementation(
+        `Trying to access an invalid collection: ${collection.collectionName}`));
+    }
+
+    if (!oldFabric) {
+      return reject(Boom.badRequest('Fabric doesnt exist'));
+    }
+
+    collection.replaceOne({ name: oldFabric.name }, newFabric, (err, res) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      } else if (!res.result.nModified) {
+        return reject(Boom.badImplementation('None fabric were replaced'));
+      } else if (res.result.ok && res.result.nModified) {
+        return resolve(newFabric);
+      }
+
+      return reject(Boom.badImplementation('Something occured...'));
+    });
+  }));
+
+// updateFabric :: Collection -> Fabric -> Task
+const updateFabric = R.curry((collection, newFabric) => validateFabric(FabricSchema, newFabric)
+  .map(R.prop('name'))
+  .chain(getFabricByName(collection))
+  .chain(replaceFabric(collection, newFabric)));
+
 module.exports = {
   getFabrics,
   insertFabric,
@@ -95,4 +126,6 @@ module.exports = {
   validateFabric,
   getFabricByName,
   saveFabric,
+  replaceFabric,
+  updateFabric,
 };
