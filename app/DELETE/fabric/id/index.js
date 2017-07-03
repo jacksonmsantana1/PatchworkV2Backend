@@ -33,7 +33,7 @@ module.exports = (request, reply) => {
   const credential = HS.getCredential(request).getOrElse('No-credential');
   const fabricId = getFabricId(request);
   const db = HS.getDB(request);
-  const collection = HS.getCollection('projects', db.get());
+  const collection = HS.getCollection('fabrics', db.get());
 
   request.log('DELETE /fabric/id',
     logMessage(request.id, true, credential, request.path, 'Endpoint reached'));

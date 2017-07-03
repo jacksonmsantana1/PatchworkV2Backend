@@ -4,3 +4,6 @@ yarn-error.log
 /dist/client-bundle.js*
 /node_modules/
 /dist/
+auth.log
+debug.log
+error.log
