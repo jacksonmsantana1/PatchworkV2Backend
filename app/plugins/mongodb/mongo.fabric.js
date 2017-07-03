@@ -119,6 +119,31 @@ const updateFabric = R.curry((collection, newFabric) => validateFabric(FabricSch
   .chain(getFabricByName(collection))
   .chain(replaceFabric(collection, newFabric)));
 
+// deleteFabricById :: Collection -> String -> Task
+const deleteFabricById = R.curry((collection, id) =>
+  new Task((reject, resolve) => {
+    if (collection.collectionName !== 'fabrics') {
+      return reject(Boom.badImplementation(
+        `Trying to access an invalid collection: ${collection.collectionName}`));
+    }
+
+    if (!id) {
+      return reject(Boom.badRequest('Invalid Id'));
+    }
+
+    collection.findOneAndDelete({ _id: H.safeId(id).get() }, (err, r) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      }
+
+      if (r.ok && r.value) {
+        return resolve(r.value);
+      }
+
+      return reject(Boom.badRequest('Fabric doesn t exist'));
+    });
+  }));
+
 module.exports = {
   getFabrics,
   insertFabric,
@@ -128,4 +153,5 @@ module.exports = {
   saveFabric,
   replaceFabric,
   updateFabric,
+  deleteFabricById,
 };

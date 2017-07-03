@@ -159,7 +159,7 @@ const deleteProjectById = R.curry((collection, id) =>
         return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
       }
 
-      if (r.ok) {
+      if (r.ok && r.value) {
         return resolve(r.value);
       }
 
