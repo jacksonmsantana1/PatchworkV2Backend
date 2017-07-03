@@ -131,7 +131,7 @@ const routeStart = () => server.route([{
           name: Joi.string().required(),
           author: Joi.string().required(),
           layout: Joi.string().required(),
-          svg: Joi.object(),
+          svg: Joi.object(),  // FIXME - Improve Svg scheme
           image: Joi.string().required(),
           description: Joi.string().required(),
         },
@@ -187,7 +187,7 @@ const routeStart = () => server.route([{
         name: Joi.string().required(),
         author: Joi.string().required(),
         layout: Joi.string().required(),
-        svg: Joi.string().required(),
+        svg: Joi.object(), // FIXME - Improve the svg scheme
         image: Joi.string().required(),
         description: Joi.string().required(),
       },
