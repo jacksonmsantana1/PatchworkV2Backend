@@ -171,6 +171,26 @@ const routeStart = () => server.route([{
   handler: require('./app/PUT/fabric/update/'),
 },
 {
+  method: 'DELETE',
+  path: '/project/id',
+  config: {
+    auth: 'admin',
+    description: 'Deletes the given project by its id',
+    tags: ['delete', 'project'],
+    notes: 'Deletes the project',
+    validate: {
+      params: {
+        id: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/DELETE/project/id/'),
+},
+{
   method: 'GET',
   path: '/projects',
   config: {
@@ -187,7 +207,7 @@ const routeStart = () => server.route([{
 },
 {
   method: 'GET',
-  path: '/facrics',
+  path: '/fabrics',
   config: {
     auth: 'default',
     description: 'Returns all the fabrics',

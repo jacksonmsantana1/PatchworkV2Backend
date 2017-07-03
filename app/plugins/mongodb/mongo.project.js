@@ -142,11 +142,37 @@ const updateProject = R.curry((collection, newProject) => validateProject(Projec
   .chain(getProjectByName(collection))
   .chain(replaceProject(collection, newProject)));
 
+// deleteProjectById :: Collection -> String -> Task
+const deleteProjectById = R.curry((collection, id) =>
+  new Task((reject, resolve) => {
+    if (collection.collectionName !== 'projects') {
+      return reject(Boom.badImplementation(
+        `Trying to access an invalid collection: ${collection.collectionName}`));
+    }
+
+    if (!id) {
+      return reject(Boom.badRequest('Invalid Id'));
+    }
+
+    collection.findOneAndDelete({ _id: H.safeId(id).get() }, (err, r) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      }
+
+      if (r.ok) {
+        return resolve(r.value);
+      }
+
+      return reject(Boom.badRequest('Project doesn t exist'));
+    });
+  }));
+
 module.exports = {
   saveProject,
   getProjects,
   getProjectByName,
   getProjectById,
   updateProject,
+  deleteProjectById,
 };
 
