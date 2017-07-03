@@ -44,6 +44,7 @@ const options = {
       module: 'good-squeeze',
       name: 'Squeeze',
       args: [{
+        request: 'ERROR',
         error: '*',
       }],
     }, {
@@ -52,6 +53,20 @@ const options = {
     }, {
       module: 'good-file',
       args: ['./error.log'],
+    }],
+    myAuthReporter: [{
+      module: 'good-squeeze',
+      name: 'Squeeze',
+      args: [{
+        request: ['AUTH', 'PUT /login', 'PUT /isLogged'],
+        response: 'AUTH',
+      }],
+    }, {
+      module: 'good-squeeze',
+      name: 'SafeJson',
+    }, {
+      module: 'good-file',
+      args: ['./auth.log'],
     }],
     myDebugReporter: [{
       module: 'good-squeeze',
@@ -67,9 +82,8 @@ const options = {
           'POST /project/save',
           'PUT /project/update',
           'PUT /fabric/update',
-          'PUT /isLogged',
-          'PUT /login',
         ],
+        response: '*',
       }],
     }, {
       module: 'good-squeeze',
