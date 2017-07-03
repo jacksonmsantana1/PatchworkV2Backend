@@ -161,6 +161,21 @@ const routeStart = () => server.route([{
 },
 {
   method: 'GET',
+  path: '/facrics',
+  config: {
+    auth: 'default',
+    description: 'Returns all the fabrics',
+    tags: ['fabric'],
+    notes: 'All the fabrics object represents a real patchwork fabric',
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/fabrics/'),
+},
+{
+  method: 'GET',
   path: '/projects/{id}',
   config: {
     auth: 'default',
