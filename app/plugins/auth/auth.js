@@ -70,7 +70,7 @@ const response = (request, reply) => {
 
   if (!!request && !!request.auth && request.auth.isAuthenticated) {
     request.response
-      .header('authorization', `Bearer ${jwt.sign({ email: request.auth.credentials.email }, KEY, options)}`);
+      .header('authorization', `Bearer ${jwt.sign({ email: request.auth.credentials.email, admin: request.auth.credentials.admin }, KEY, options)}`);
   }
 
   reply.continue();

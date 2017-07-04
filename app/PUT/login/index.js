@@ -34,7 +34,7 @@ const createToken = (user) => {
     expiresIn: '5m',
   };
 
-  return Task.of(`Bearer ${Jwt.sign({ email: user.email }, KEY, options)}`);
+  return Task.of(`Bearer ${Jwt.sign({ email: user.email, admin: user.admin }, KEY, options)}`);
 };
 
 // sendRequest :: Request -> Response -> String

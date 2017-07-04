@@ -295,6 +295,21 @@ const routeStart = () => server.route([{
   handler: require('./app/GET/projects/id/'),
 },
 {
+  method: 'GET',
+  path: '/users/{email}',
+  config: {
+    auth: 'default',
+    description: 'Return the user with the given email',
+    tags: ['users', 'user', 'email'],
+    notes: 'Return user with the given email, the email with the token must be the same as the params email',
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/users/email/'),
+},
+{
   method: 'POST',
   path: '/project/save',
   config: {

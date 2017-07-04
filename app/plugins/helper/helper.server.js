@@ -7,6 +7,10 @@ const H = require('./helper');
 const getCredential = request => Either.fromNullable(request)
   .chain(H.props('auth')).chain(H.props('credentials')).chain(H.props('email'));
 
+// getCredentials :: Request -> Either(Object)
+const getCredentials = request => Either.fromNullable(request)
+  .chain(H.props('auth')).chain(H.props('credentials'));
+
 // getDB :: Request -> Either(MongoDB, String)
 const getDB = request => Either.fromNullable(request)
   .chain(H.props('server'))
@@ -39,6 +43,7 @@ const isAuthenticated = request => Either.fromNullable(request)
 
 module.exports = {
   getCredential,
+  getCredentials,
   getDB,
   getCollection,
   isAuthenticated,
