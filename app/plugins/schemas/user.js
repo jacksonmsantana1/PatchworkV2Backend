@@ -5,4 +5,6 @@ module.exports = Joi.object().keys({
   admin: Joi.boolean().required(),
   email: Joi.string().required(),
   password: Joi.string(),
+  lastSession: Joi.string(),
+  projects: Joi.array().items(Joi.object()),
 });
