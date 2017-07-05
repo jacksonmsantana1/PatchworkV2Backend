@@ -147,14 +147,6 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/PUT/login/'),
-}, {
-  method: 'GET',
-  path: '/images/{file*}',
-  handler: {
-    directory: {
-      path: 'public/images',
-    },
-  },
 },
 {
   method: 'PUT',
@@ -210,6 +202,26 @@ const routeStart = () => server.route([{
   handler: require('./app/PUT/fabric/update/'),
 },
 {
+  method: 'PUT',
+  path: '/isLogged',
+  config: {
+    auth: 'default',
+    description: 'Checks if the user is logged',
+    tags: ['logged'],
+    notes: 'returns true if the user is logged and false if is not',
+    validate: {
+      payload: {
+        token: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/PUT/isLogged'),
+},
+{
   method: 'DELETE',
   path: '/project/{id}',
   config: {
@@ -248,6 +260,15 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/DELETE/fabric/id/'),
+},
+{
+  method: 'GET',
+  path: '/images/{file*}',
+  handler: {
+    directory: {
+      path: 'public/images',
+    },
+  },
 },
 {
   method: 'GET',
@@ -336,6 +357,31 @@ const routeStart = () => server.route([{
 },
 {
   method: 'POST',
+  path: '/user/save',
+  config: {
+    // No Authentication
+    description: 'Save a new user',
+    tags: ['user', 'save', 'admin'],
+    notes: 'Only new users can be added',
+    validate: {
+      payload: {
+        name: Joi.string().required(),
+        admin: Joi.boolean().required(),
+        email: Joi.string().required(),
+        password: Joi.string().required(),
+        lastSession: Joi.string(),
+        projects: Joi.array().items(Joi.object()),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/POST/user/save'),
+},
+{
+  method: 'POST',
   path: '/fabric/save',
   config: {
     auth: 'admin',
@@ -357,26 +403,6 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/POST/fabric/save'),
-},
-{
-  method: 'PUT',
-  path: '/isLogged',
-  config: {
-    auth: 'default',
-    description: 'Checks if the user is logged',
-    tags: ['logged'],
-    notes: 'returns true if the user is logged and false if is not',
-    validate: {
-      payload: {
-        token: Joi.string().required(),
-      },
-    },
-    cors: {
-      origin: ['*'],
-      additionalHeaders: ['cache-control', 'x-requested-with'],
-    },
-  },
-  handler: require('./app/PUT/isLogged'),
 }]);
 
 /** ********************************Start********************************* **/
