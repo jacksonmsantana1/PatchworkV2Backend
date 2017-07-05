@@ -262,6 +262,26 @@ const routeStart = () => server.route([{
   handler: require('./app/DELETE/fabric/id/'),
 },
 {
+  method: 'DELETE',
+  path: '/user/{email}',
+  config: {
+    auth: 'admin',
+    description: 'Deletes the given user by its email',
+    tags: ['delete', 'user'],
+    notes: 'Deletes the user',
+    validate: {
+      params: {
+        email: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/DELETE/user/email/'),
+},
+{
   method: 'GET',
   path: '/images/{file*}',
   handler: {

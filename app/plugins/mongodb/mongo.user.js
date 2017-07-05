@@ -105,10 +105,36 @@ const saveUser = R.curry((collection, user) => validateUser(UserSchema, user)
   })
   .chain(insertUser(collection)));
 
+// deleteUserByEmail :: Collection -> String -> Task
+const deleteUserByEmail = R.curry((collection, email) =>
+  new Task((reject, resolve) => {
+    if (collection.collectionName !== 'users') {
+      return reject(Boom.badImplementation(
+        `Trying to access an invalid collection: ${collection.collectionName}`));
+    }
+
+    if (!email) {
+      return reject(Boom.badRequest('Invalid Email'));
+    }
+
+    collection.findOneAndDelete({ email }, (err, r) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      }
+
+      if (r.ok && r.value) {
+        return resolve(r.value);
+      }
+
+      return reject(Boom.badRequest('User doesn t exist'));
+    });
+  }));
+
 module.exports = {
   findUserByEmail,
   findUserById,
   insertUser,
   isUserSaved,
   saveUser,
+  deleteUserByEmail,
 };
