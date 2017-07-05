@@ -362,6 +362,7 @@ const routeStart = () => server.route([{
   method: 'PUT',
   path: '/isLogged',
   config: {
+    auth: 'default',
     description: 'Checks if the user is logged',
     tags: ['logged'],
     notes: 'returns true if the user is logged and false if is not',
