@@ -187,6 +187,9 @@ const routeStart = () => server.route([{
       payload: {
         lastSession: Joi.string().required(),
       },
+      params: {
+        email: Joi.string().required(),
+      },
     },
     cors: {
       origin: ['*'],
@@ -348,6 +351,11 @@ const routeStart = () => server.route([{
     description: 'Returns a patchwork project with the given id',
     tags: ['projects', 'project', 'id'],
     notes: 'Return the main information about the patchwork project with the given id',
+    validate: {
+      params: {
+        id: Joi.string().required(),
+      },
+    },
     cors: {
       origin: ['*'],
       additionalHeaders: ['cache-control', 'x-requested-with'],
@@ -363,6 +371,11 @@ const routeStart = () => server.route([{
     description: 'Return the user with the given email',
     tags: ['users', 'user', 'email'],
     notes: 'Return user with the given email, the email with the token must be the same as the params email',
+    validate: {
+      params: {
+        email: Joi.string().required(),
+      },
+    },
     cors: {
       origin: ['*'],
       additionalHeaders: ['cache-control', 'x-requested-with'],
@@ -378,12 +391,58 @@ const routeStart = () => server.route([{
     description: 'Return the user last session url',
     tags: ['users', 'user', 'email'],
     notes: 'Return the last page the user was in',
+    validate: {
+      params: {
+        email: Joi.string().required(),
+      },
+    },
     cors: {
       origin: ['*'],
       additionalHeaders: ['cache-control', 'x-requested-with'],
     },
   },
   handler: require('./app/GET/users/lastSession/'),
+},
+{
+  method: 'GET',
+  path: '/users/{email}/projects',
+  config: {
+    auth: 'default',
+    description: 'Return the user patchwork projects',
+    tags: ['projects', 'user', 'email'],
+    notes: 'Return all the patchwork projects',
+    validate: {
+      params: {
+        email: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/users/email/projects/'),
+},
+{
+  method: 'GET',
+  path: '/users/{email}/projects/{sessionId}',
+  config: {
+    auth: 'default',
+    description: 'Return the user patchwork project with the given session id',
+    tags: ['projects', 'user', 'email', 'project', 'sessionId'],
+    notes: 'The patchwork project with the given session id',
+    validate: {
+      params: {
+        email: Joi.string().required(),
+        sessionId: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/users/email/projects/sessionId/'),
 },
 {
   method: 'POST',

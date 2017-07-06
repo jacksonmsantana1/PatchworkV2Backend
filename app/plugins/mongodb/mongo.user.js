@@ -162,6 +162,13 @@ const updateUserLastSession = R.curry((collection, email, lastSession) =>
     });
   }));
 
+// findProjectBySessionId :: Collection -> String -> String
+const findProjectBySessionId = R.curry((collection, email, sessionId) =>
+  findUserByEmail(collection, email)
+    .chain(H.props('projects'))
+    .map(projects => projects.filter(proj => (proj.sessionIs === sessionId)))
+    .map(H.nth(0)));
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -170,4 +177,5 @@ module.exports = {
   saveUser,
   deleteUserByEmail,
   updateUserLastSession,
+  findProjectBySessionId,
 };
