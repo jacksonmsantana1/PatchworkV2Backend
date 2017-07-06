@@ -351,6 +351,21 @@ const routeStart = () => server.route([{
   handler: require('./app/GET/users/email/'),
 },
 {
+  method: 'GET',
+  path: '/users/{email}/lastSession',
+  config: {
+    auth: 'default',
+    description: 'Return the user last session url',
+    tags: ['users', 'user', 'email'],
+    notes: 'Return the last page the user was in',
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/users/lastSession/'),
+},
+{
   method: 'POST',
   path: '/project/save',
   config: {

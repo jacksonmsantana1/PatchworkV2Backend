@@ -16,11 +16,20 @@ const removePassword = (user) => {
   return _user;
 };
 
+// getLastSession :: User -> String
+const getLastSession = (user) => {
+  if (!user.lastSession) {
+    return '';
+  }
+
+  return user.lastSession;
+};
+
 // sendRequest :: Request -> Response -> String
 const sendRequest = R.curry((request, reply, project) => {
   const credential = HS.getCredential(request).getOrElse('No credentials');
 
-  request.log('GET /users/email',
+  request.log('GET /users/email/lastSession',
     logMessage(request.id, true, credential, request.path, 'OK 200'));
 
   reply(project);
@@ -42,7 +51,7 @@ module.exports = (request, reply) => {
   const db = HS.getDB(request);
   const collection = HS.getCollection('users', db.get());
 
-  request.log('GET /users/email',
+  request.log('GET /users/email/lastSession',
     logMessage(request.id, true, credentials.email, request.path, 'Endpoint reached'));
 
   if (!HS.isAuthenticated(request).getOrElse(false)) {
@@ -69,5 +78,6 @@ module.exports = (request, reply) => {
 
   Mongo.findUserByEmail(collection.get(), userEmail.get())
     .map(removePassword)
+    .map(getLastSession)
     .fork(sendError(request, reply), sendRequest(request, reply));
 };
