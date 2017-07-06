@@ -150,11 +150,7 @@ const updateUserLastSession = R.curry((collection, email, lastSession) =>
         return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
       }
 
-      if (!res.result.nModified) {
-        return reject(Boom.badImplementation('None user were updated'));
-      }
-
-      if (res.result.ok && res.result.nModified) {
+      if (res.result.ok) {
         return resolve(lastSession);
       }
 
