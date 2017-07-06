@@ -177,6 +177,26 @@ const routeStart = () => server.route([{
 },
 {
   method: 'PUT',
+  path: '/user/{email}/lastSession',
+  config: {
+    auth: 'default',
+    description: 'Updates user property lastSession',
+    tags: ['update', 'user', 'lastSession'],
+    notes: 'Updates user last session',
+    validate: {
+      payload: {
+        lastSession: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/PUT/user/lastSession/'),
+},
+{
+  method: 'PUT',
   path: '/fabric/update',
   config: {
     auth: 'admin',

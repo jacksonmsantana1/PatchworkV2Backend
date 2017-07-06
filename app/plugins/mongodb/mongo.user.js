@@ -130,6 +130,38 @@ const deleteUserByEmail = R.curry((collection, email) =>
     });
   }));
 
+const updateUserLastSession = R.curry((collection, email, lastSession) =>
+  new Task((reject, resolve) => {
+    if (collection.collectionName !== 'users') {
+      return reject(Boom.badImplementation(
+        `Trying to access an invalid collection: ${collection.collectionName}`));
+    }
+
+    if (!email) {
+      return reject(Boom.badRequest('Invalid Email'));
+    }
+
+    if (!lastSession) {
+      return reject(Boom.badRequest('Invalid Session'));
+    }
+
+    collection.updateOne({ email }, { $set: { lastSession } }, (err, res) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      }
+
+      if (!res.result.nModified) {
+        return reject(Boom.badImplementation('None user were updated'));
+      }
+
+      if (res.result.ok && res.result.nModified) {
+        return resolve(lastSession);
+      }
+
+      return reject(Boom.badImplementation('Something occured...'));
+    });
+  }));
+
 module.exports = {
   findUserByEmail,
   findUserById,
@@ -137,4 +169,5 @@ module.exports = {
   isUserSaved,
   saveUser,
   deleteUserByEmail,
+  updateUserLastSession,
 };
