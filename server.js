@@ -73,15 +73,26 @@ const options = {
       name: 'Squeeze',
       args: [{
         request: [
+          // TODO Missing some endpoints
           'DELETE /project/id',
           'DELETE /fabric/id',
+          'DELETE /user/email',
+          'POST /user/projects/sessionId',
           'GET /fabrics',
           'GET /projects',
           'GET /projects/id',
+          'GET /users/email',
+          'GET /users/email/projects/sessionId',
+          'GET /users/email/projects',
+          'GET /users/email/lastSession',
           'POST /fabric/save',
           'POST /project/save',
+          'POST /user/save',
+          'POST /user/save/project',
           'PUT /project/update',
+          'PUT /users/email/lastSession',
           'PUT /fabric/update',
+          'PUT /user/project',
         ],
         response: '*',
       }],
@@ -245,6 +256,26 @@ const routeStart = () => server.route([{
   handler: require('./app/PUT/isLogged'),
 },
 {
+  method: 'PUT',
+  path: '/user/{email}/projects/{sessionId}',
+  config: {
+    auth: 'default',
+    description: 'Update the svg property of some user project',
+    tags: ['logged'],
+    notes: 'The property updated is svg for the project',
+    validate: {
+      payload: {
+        svg: Joi.object().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/PUT/user/project/'),
+},
+{
   method: 'DELETE',
   path: '/project/{id}',
   config: {
@@ -263,6 +294,26 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/DELETE/project/id/'),
+},
+{
+  method: 'DELETE',
+  path: '/user/projects/{sessionId}',
+  config: {
+    auth: 'default',
+    description: 'Deletes the user project with the given id',
+    tags: ['delete', 'project', 'user'],
+    notes: 'Deletes the project',
+    validate: {
+      params: {
+        sessionId: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/DELETE/user/projects/sessionId/'),
 },
 {
   method: 'DELETE',
@@ -495,6 +546,29 @@ const routeStart = () => server.route([{
   handler: require('./app/POST/user/save'),
 },
 {
+    method: 'POST',
+  path: '/user/save/project',
+  config: {
+    auth: 'default',
+    description: 'Save a new user project',
+    tags: ['user', 'save', 'project'],
+    notes: 'A new project made by the user is saved',
+    validate: {
+      payload: {
+        projectId: Joi.string().required(),
+        sessionId: Joi.string().required(),
+        name: Joi.string().required(),
+        svg: Joi.object().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/POST/user/save/project/'),
+},
+{
   method: 'POST',
   path: '/fabric/save',
   config: {
@@ -519,7 +593,8 @@ const routeStart = () => server.route([{
   handler: require('./app/POST/fabric/save'),
 }]);
 
-/** ********************************Start********************************* **/
+
+/************************************Start*****************************************/
 
 const start = () => {
   routeStart();

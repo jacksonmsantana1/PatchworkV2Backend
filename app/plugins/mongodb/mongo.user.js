@@ -158,12 +158,100 @@ const updateUserLastSession = R.curry((collection, email, lastSession) =>
     });
   }));
 
+// Collection -> String -> String -> Task
+const deleteProject = R.curry((collection, email, sessionId) =>
+  new Task((reject, resolve) => {
+    if (!email) {
+      return reject(Boom.badRequest('Invalid Email'));
+    }
+
+    if (!sessionId) {
+      return reject(Boom.badRequest('Invalid Project'));
+    }
+
+    collection.updateOne({ email }, { $pull: { projects: { sessionId } } },
+      (err, r) => {
+        if (err) {
+          return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+        }
+
+        if (r.result.ok) {
+          return resolve(sessionId);
+        }
+
+        return reject(Boom.badImplementation('Something occured...'));
+      });
+  }));
+
+// saveProject :: Collection -> String -> Project -> Task
+const saveProject = R.curry((collection, email, project) =>
+  new Task((reject, resolve) => {
+    if (!email) {
+      return reject(Boom.badRequest('Invalid Email'));
+    }
+
+    if (!project) {
+      return reject(Boom.badRequest('Invalid Project'));
+    }
+
+    collection.updateOne({ email }, { $push: { projects: project } }, (err, r) => {
+      if (err) {
+        return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+      }
+
+
+      if (r.result.ok) {
+        return resolve(project);
+      }
+
+      return reject(Boom.badImplementation('Something occured...'));
+    });
+  }));
+
 // findProjectBySessionId :: Collection -> String -> String
 const findProjectBySessionId = R.curry((collection, email, sessionId) =>
   findUserByEmail(collection, email)
     .chain(H.props('projects'))
     .map(projects => projects.filter(proj => (proj.sessionIs === sessionId)))
     .map(H.nth(0)));
+
+const updateProjectBySessionId = R.curry((collection, email, sessionId, svg) =>
+  new Task((reject, resolve) => {
+    if (!email) {
+      return reject(Boom.badRequest('Invalid Email'));
+    }
+
+    if (!sessionId) {
+      return reject(Boom.badRequest('Invalid Session ID'));
+    }
+
+    if (!svg) {
+      return reject(Boom.badRequest('Invalid SVG'));
+    }
+
+    collection.updateOne({ email, 'projects.sessionId': sessionId }, { $set: { 'projects.$.svg': svg } },
+      (err, r) => {
+        if (err) {
+          return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
+        }
+
+        console.log(r.result);
+
+        if (!r.result.n) {
+          return reject(Boom.badRequest(`None user project was found with this ID: ${sessionId}`));
+        }
+
+        if (r.result.ok && !r.result.nModified) {
+          return resolve('Project already updated');
+        }
+
+        if (r.result.ok && r.result.nModified) {
+          return resolve(svg);
+        }
+
+        return reject(Boom.badImplementation('Something occured...'));
+      });
+  }));
 
 module.exports = {
   findUserByEmail,
@@ -174,4 +262,7 @@ module.exports = {
   deleteUserByEmail,
   updateUserLastSession,
   findProjectBySessionId,
+  deleteProject,
+  saveProject,
+  updateProjectBySessionId,
 };
