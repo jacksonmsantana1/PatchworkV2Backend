@@ -77,6 +77,7 @@ const options = {
           'DELETE /project/id',
           'DELETE /fabric/id',
           'DELETE /user/email',
+          'DELETE /block/id',
           'POST /user/projects/sessionId',
           'GET /fabrics',
           'GET /projects',
@@ -85,14 +86,17 @@ const options = {
           'GET /users/email/projects/sessionId',
           'GET /users/email/projects',
           'GET /users/email/lastSession',
+          'GET /blocks/id',
           'POST /fabric/save',
           'POST /project/save',
           'POST /user/save',
           'POST /user/save/project',
+          'POST /block/save',
           'PUT /project/update',
           'PUT /users/email/lastSession',
           'PUT /fabric/update',
           'PUT /user/project',
+          'PUT /block/update',
         ],
         response: '*',
       }],
@@ -237,6 +241,33 @@ const routeStart = () => server.route([{
 },
 {
   method: 'PUT',
+  path: '/block/update',
+  config: {
+    auth: 'admin',
+    description: 'Updates the given block',
+    tags: ['update', 'block'],
+    notes: 'Updates the block',
+    validate: {
+      payload: {
+        block: {
+          _id: Joi.any().optional(),
+          name: Joi.string().required(),
+          svg: Joi.object().required(),
+          image: Joi.string().required(),
+          description: Joi.string().required(),
+          blockStyle: Joi.string().required(),
+        },
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/PUT/block/update/'),
+},
+{
+  method: 'PUT',
   path: '/isLogged',
   config: {
     auth: 'default',
@@ -337,6 +368,26 @@ const routeStart = () => server.route([{
 },
 {
   method: 'DELETE',
+  path: '/block/{id}',
+  config: {
+    auth: 'admin',
+    description: 'Deletes the given block by its id',
+    tags: ['delete', 'block'],
+    notes: 'Deletes the block',
+    validate: {
+      params: {
+        id: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/DELETE/block/id/'),
+},
+{
+  method: 'DELETE',
   path: '/user/{email}',
   config: {
     auth: 'admin',
@@ -413,6 +464,26 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/GET/projects/id/'),
+},
+{
+  method: 'GET',
+  path: '/blocks/{id}',
+  config: {
+    auth: 'default',
+    description: 'Returns a patchwork block with the given id',
+    tags: ['blocks', 'block', 'id'],
+    notes: 'Return the main information about the patchwork block with the given id',
+    validate: {
+      params: {
+        id: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/blocks/id/'),
 },
 {
   method: 'GET',
@@ -546,7 +617,7 @@ const routeStart = () => server.route([{
   handler: require('./app/POST/user/save'),
 },
 {
-    method: 'POST',
+  method: 'POST',
   path: '/user/save/project',
   config: {
     auth: 'default',
@@ -567,6 +638,30 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/POST/user/save/project/'),
+},
+{
+  method: 'POST',
+  path: '/block/save',
+  config: {
+    auth: 'admin',
+    description: 'Save a new block',
+    tags: ['block', 'save'],
+    notes: 'A new block is saved',
+    validate: {
+      payload: {
+        name: Joi.string().required(),
+        svg: Joi.object().required(),
+        image: Joi.string().required(),
+        description: Joi.string().required(),
+        blockStyle: Joi.string().required(),
+      },
+    },
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/POST/block/save/'),
 },
 {
   method: 'POST',
