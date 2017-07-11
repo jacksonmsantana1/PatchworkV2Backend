@@ -296,7 +296,7 @@ const routeStart = () => server.route([{
     notes: 'The property updated is svg for the project',
     validate: {
       payload: {
-        svg: Joi.object().required(),
+        svg: Joi.alternatives().try(Joi.object(), Joi.array()).required(),
       },
     },
     cors: {
@@ -629,7 +629,7 @@ const routeStart = () => server.route([{
         projectId: Joi.string().required(),
         sessionId: Joi.string().required(),
         name: Joi.string().required(),
-        svg: Joi.object().required(),
+        svg: Joi.alternatives().try(Joi.object(), Joi.array()).required(),
       },
     },
     cors: {
