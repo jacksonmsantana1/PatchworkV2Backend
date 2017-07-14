@@ -80,6 +80,7 @@ const options = {
           'DELETE /block/id',
           'POST /user/projects/sessionId',
           'GET /fabrics',
+          'GET /blocks',
           'GET /projects',
           'GET /projects/id',
           'GET /users/email',
@@ -444,6 +445,21 @@ const routeStart = () => server.route([{
     },
   },
   handler: require('./app/GET/fabrics/'),
+},
+{
+  method: 'GET',
+  path: '/blocks',
+  config: {
+    auth: 'default',
+    description: 'Returns all the blocks',
+    tags: ['block'],
+    notes: 'All the blocks are returned',
+    cors: {
+      origin: ['*'],
+      additionalHeaders: ['cache-control', 'x-requested-with'],
+    },
+  },
+  handler: require('./app/GET/blocks/'),
 },
 {
   method: 'GET',

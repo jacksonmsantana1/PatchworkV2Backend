@@ -235,8 +235,6 @@ const updateProjectBySessionId = R.curry((collection, email, sessionId, svg) =>
           return reject(Boom.badImplementation(`Internal MongoDB error: ${err.message}`));
         }
 
-        console.log(r.result);
-
         if (!r.result.n) {
           return reject(Boom.badRequest(`None user project was found with this ID: ${sessionId}`));
         }

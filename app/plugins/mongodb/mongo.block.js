@@ -163,6 +163,23 @@ const deleteBlockById = R.curry((collection, id) =>
     });
   }));
 
+// getBlocks :: Collection -> Task([])
+const getBlocks = R.curry(collection => new Task((reject, resolve) => {
+  /* eslint consistent-return:0 */
+  if (collection.collectionName !== 'blocks') {
+    return reject(Boom.badImplementation(
+      `Trying to access an invalid collection: ${collection.collectionName}`));
+  }
+
+  collection.find().toArray((err, docs) => {
+    if (err) {
+      return reject(err);
+    }
+
+    resolve(docs);
+  });
+}));
+
 module.exports = {
   getBlockByName,
   getBlockById,
@@ -173,4 +190,5 @@ module.exports = {
   replaceBlock,
   updateBlock,
   deleteBlockById,
+  getBlocks,
 };
