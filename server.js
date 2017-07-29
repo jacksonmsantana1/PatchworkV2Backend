@@ -181,6 +181,8 @@ const routeStart = () => server.route([{
           svg: Joi.object(), // FIXME - Improve Svg scheme
           image: Joi.string().required(),
           description: Joi.string().required(),
+          width: Joi.number().required(),
+          height: Joi.number().required(),
         },
       },
     },
@@ -598,6 +600,8 @@ const routeStart = () => server.route([{
         svg: Joi.object(), // FIXME - Improve the svg scheme
         image: Joi.string().required(),
         description: Joi.string().required(),
+        width: Joi.number().required(),
+        height: Joi.number().required(),
       },
     },
     cors: {
@@ -646,6 +650,7 @@ const routeStart = () => server.route([{
         sessionId: Joi.string().required(),
         name: Joi.string().required(),
         svg: Joi.alternatives().try(Joi.object(), Joi.array()).required(),
+        type: Joi.string().required(),
       },
     },
     cors: {
@@ -703,7 +708,6 @@ const routeStart = () => server.route([{
   },
   handler: require('./app/POST/fabric/save'),
 }]);
-
 
 /************************************Start*****************************************/
 

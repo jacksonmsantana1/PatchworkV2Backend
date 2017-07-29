@@ -8,4 +8,6 @@ module.exports = Joi.object().keys({
   svg: Joi.object().required(), // FIXME Create a better scheme for svg with all the properties
   image: Joi.string().required(),
   description: Joi.string().required(),
+  width: Joi.number().required(),
+  height: Joi.number().required(),
 });
