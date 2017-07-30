@@ -651,6 +651,9 @@ const routeStart = () => server.route([{
         name: Joi.string().required(),
         svg: Joi.alternatives().try(Joi.object(), Joi.array()).required(),
         type: Joi.string().required(),
+        layout: Joi.string(),
+        width: Joi.number(),
+        height: Joi.number(),
       },
     },
     cors: {
